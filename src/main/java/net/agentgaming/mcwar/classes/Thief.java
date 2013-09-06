@@ -66,4 +66,8 @@ public class Thief implements MCWarClass {
     public Integer getSpec() {
         return spec;
     }
+
+    public String getName() {
+        return "Thief";
+    }
 }

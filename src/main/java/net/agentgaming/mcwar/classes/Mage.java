@@ -68,4 +68,8 @@ public class Mage implements MCWarClass {
     public Integer getSpec() {
         return spec;
     }
+
+    public String getName() {
+        return "Mage";
+    }
 }

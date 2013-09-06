@@ -66,4 +66,8 @@ public class Summoner implements MCWarClass {
     public Integer getSpec() {
         return spec;
     }
+
+    public String getName() {
+        return "Summoner";
+    }
 }

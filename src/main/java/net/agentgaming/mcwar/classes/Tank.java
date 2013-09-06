@@ -61,4 +61,8 @@ public class Tank implements MCWarClass {
     public Integer getSpec() {
        return spec;
     }
+
+    public String getName() {
+        return "Tank";
+    }
 }

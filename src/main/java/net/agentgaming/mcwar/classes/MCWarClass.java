@@ -23,4 +23,6 @@ public interface MCWarClass {
     public void setSpec(Integer i);
 
     public Integer getSpec();
+
+    public String getName();
 }
