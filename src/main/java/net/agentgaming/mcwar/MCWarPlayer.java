@@ -1,5 +1,7 @@
 package net.agentgaming.mcwar;
 
+import net.agentgaming.mcwar.classes.MCWarClass;
+
 import java.util.ArrayList;
 
 public class MCWarPlayer {
@@ -40,15 +42,15 @@ public class MCWarPlayer {
         this.scores = scores;
     }
 
-    public boolean hasFirstSpec(String s) {
-        return firstSpecs.contains(s);
+    public boolean hasFirstSpec(MCWarClass mwc) {
+        return firstSpecs.contains(mwc.getName());
     }
 
-    public void addFirstSpec(String s) {
-        firstSpecs.add(s);
+    public void addFirstSpec(MCWarClass mwc) {
+        firstSpecs.add(mwc.getName());
     }
 
-    public void removeFirstSpec(String s) {
-        firstSpecs.remove(s);
+    public void removeFirstSpec(MCWarClass mwc) {
+        firstSpecs.remove(mwc.getName());
     }
 }

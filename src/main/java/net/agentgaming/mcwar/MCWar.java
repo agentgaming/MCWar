@@ -3,6 +3,7 @@ package net.agentgaming.mcwar;
 import com.mike724.motoapi.push.ServerState;
 import com.mike724.motoapi.push.ServerType;
 import com.mike724.motoserver.MotoServer;
+import net.agentgaming.mcwar.events.ClassEvents;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MCWar extends JavaPlugin {
@@ -16,12 +17,15 @@ public class MCWar extends JavaPlugin {
         //Register the server with MotoPush (needs to be changed to ServerType.MCWar when exists)
         MotoServer.getInstance().getMotoPush().setIdentity(ServerType.UNKNOWN, ServerState.OPEN);
 
-        this.getLogger().info("MotoHub Enabled");
+        //Register Events
+        getServer().getPluginManager().registerEvents(new ClassEvents(), this);
+
+        this.getLogger().info("MCWar Enabled");
     }
 
     @Override
     public void onDisable() {
-        this.getLogger().info("MotoHub Disabled");
+        this.getLogger().info("MCwar Disabled");
     }
 
 
