@@ -8,22 +8,22 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 
-public class Tank implements MCWarClass {
+public class Scout implements MCWarClass {
     private ArrayList<ItemStack> inventory;
     private ArrayList<PotionEffect> passiveEffects;
     private Integer spec;
 
-    public Tank(Integer spec) {
+    public Scout(Integer spec) {
         this.spec = spec;
 
         this.inventory = new ArrayList<>();
         ItemStack sword = new ItemStack(Material.IRON_SWORD);
-        sword.getItemMeta().setDisplayName(ChatColor.GOLD + "Tank's Sword");
+        sword.getItemMeta().setDisplayName(ChatColor.GOLD + "Scout's Sword");
         this.inventory.add(sword);
 
         this.passiveEffects = new ArrayList<>();
-        this.passiveEffects.add(new PotionEffect(PotionEffectType.SLOW, 200, 2));
-        this.passiveEffects.add(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 200, 2));
+        this.passiveEffects.add(new PotionEffect(PotionEffectType.SPEED, 200, 3));
+        this.passiveEffects.add(new PotionEffect(PotionEffectType.JUMP, 200, 3));
     }
 
     public ArrayList<ItemStack> getInventory() {
@@ -31,15 +31,15 @@ public class Tank implements MCWarClass {
     }
 
     public ItemStack getChestArmor() {
-        return new ItemStack(Material.DIAMOND_CHESTPLATE);
+        return new ItemStack(Material.GOLD_CHESTPLATE);
     }
 
     public ItemStack getLegArmor() {
-        return new ItemStack(Material.DIAMOND_LEGGINGS);
+        return new ItemStack(Material.GOLD_LEGGINGS);
     }
 
     public ItemStack getFootArmor() {
-        return new ItemStack(Material.DIAMOND_BOOTS);
+        return new ItemStack(Material.GOLD_BOOTS);
     }
 
     public ArrayList<PotionEffect> getPassiveEffects() {
@@ -59,6 +59,6 @@ public class Tank implements MCWarClass {
     }
 
     public Integer getSpec() {
-       return spec;
+        return spec;
     }
 }

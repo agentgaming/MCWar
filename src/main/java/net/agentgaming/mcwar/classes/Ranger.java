@@ -2,28 +2,28 @@ package net.agentgaming.mcwar.classes;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 
-public class Tank implements MCWarClass {
+public class Ranger implements MCWarClass {
     private ArrayList<ItemStack> inventory;
     private ArrayList<PotionEffect> passiveEffects;
     private Integer spec;
 
-    public Tank(Integer spec) {
+    public Ranger(Integer spec) {
         this.spec = spec;
 
         this.inventory = new ArrayList<>();
-        ItemStack sword = new ItemStack(Material.IRON_SWORD);
-        sword.getItemMeta().setDisplayName(ChatColor.GOLD + "Tank's Sword");
-        this.inventory.add(sword);
+        ItemStack bow = new ItemStack(Material.BOW);
+        bow.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
+        bow.addEnchantment(Enchantment.ARROW_INFINITE, 1);
+        bow.getItemMeta().setDisplayName(ChatColor.GOLD + "Ranger's Bow");
+        this.inventory.add(bow);
 
         this.passiveEffects = new ArrayList<>();
-        this.passiveEffects.add(new PotionEffect(PotionEffectType.SLOW, 200, 2));
-        this.passiveEffects.add(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 200, 2));
     }
 
     public ArrayList<ItemStack> getInventory() {
@@ -31,15 +31,15 @@ public class Tank implements MCWarClass {
     }
 
     public ItemStack getChestArmor() {
-        return new ItemStack(Material.DIAMOND_CHESTPLATE);
+        return new ItemStack(Material.CHAINMAIL_CHESTPLATE);
     }
 
     public ItemStack getLegArmor() {
-        return new ItemStack(Material.DIAMOND_LEGGINGS);
+        return new ItemStack(Material.CHAINMAIL_LEGGINGS);
     }
 
     public ItemStack getFootArmor() {
-        return new ItemStack(Material.DIAMOND_BOOTS);
+        return new ItemStack(Material.CHAINMAIL_BOOTS);
     }
 
     public ArrayList<PotionEffect> getPassiveEffects() {
@@ -51,7 +51,7 @@ public class Tank implements MCWarClass {
     }
 
     public boolean hasInstaShoot() {
-        return false;
+        return spec >= 3;
     }
 
     public void setSpec(Integer i) {
@@ -59,6 +59,6 @@ public class Tank implements MCWarClass {
     }
 
     public Integer getSpec() {
-       return spec;
+        return spec;
     }
 }

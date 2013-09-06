@@ -1,29 +1,30 @@
 package net.agentgaming.mcwar.classes;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 
-public class Tank implements MCWarClass {
+public class Mage implements MCWarClass {
     private ArrayList<ItemStack> inventory;
     private ArrayList<PotionEffect> passiveEffects;
     private Integer spec;
 
-    public Tank(Integer spec) {
+    public Mage(Integer spec) {
         this.spec = spec;
 
         this.inventory = new ArrayList<>();
-        ItemStack sword = new ItemStack(Material.IRON_SWORD);
-        sword.getItemMeta().setDisplayName(ChatColor.GOLD + "Tank's Sword");
-        this.inventory.add(sword);
+        ItemStack wand = new ItemStack(Material.STICK);
+        wand.getItemMeta().setDisplayName(ChatColor.GOLD + "Mage's Wand");
+        wand.addEnchantment(Enchantment.KNOCKBACK, 1);
+        this.inventory.add(wand);
 
         this.passiveEffects = new ArrayList<>();
-        this.passiveEffects.add(new PotionEffect(PotionEffectType.SLOW, 200, 2));
-        this.passiveEffects.add(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 200, 2));
     }
 
     public ArrayList<ItemStack> getInventory() {
@@ -31,15 +32,21 @@ public class Tank implements MCWarClass {
     }
 
     public ItemStack getChestArmor() {
-        return new ItemStack(Material.DIAMOND_CHESTPLATE);
+        ItemStack chest = new ItemStack(Material.LEATHER_CHESTPLATE);
+        ((LeatherArmorMeta) chest.getItemMeta()).setColor(Color.BLUE);
+        return chest;
     }
 
     public ItemStack getLegArmor() {
-        return new ItemStack(Material.DIAMOND_LEGGINGS);
+        ItemStack legs = new ItemStack(Material.LEATHER_LEGGINGS);
+        ((LeatherArmorMeta) legs.getItemMeta()).setColor(Color.BLUE);
+        return legs;
     }
 
     public ItemStack getFootArmor() {
-        return new ItemStack(Material.DIAMOND_BOOTS);
+        ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
+        ((LeatherArmorMeta) boots.getItemMeta()).setColor(Color.BLUE);
+        return boots;
     }
 
     public ArrayList<PotionEffect> getPassiveEffects() {
@@ -59,6 +66,6 @@ public class Tank implements MCWarClass {
     }
 
     public Integer getSpec() {
-       return spec;
+        return spec;
     }
 }

@@ -16,6 +16,10 @@ public interface MCWarClass {
 
     public ArrayList<PotionEffect> getPassiveEffects();
 
+    public boolean isImmuneToPoison();
+
+    public boolean hasInstaShoot();
+
     public void setSpec(Integer i);
 
     public Integer getSpec();
