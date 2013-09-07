@@ -28,6 +28,7 @@ public class ClassEvents implements Listener {
     @EventHandler
     public void onEntityDamage(EntityDamageEvent e) {
         if (e.isCancelled()) return;
+        if (!MCWar.getInstance().isGameInProgress()) return;
 
         //Recieve any damage
         if (e.getEntity() instanceof Player) {
@@ -62,8 +63,14 @@ public class ClassEvents implements Listener {
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
         if (e.isCancelled()) return;
-        //TODO: If game no in progress return
-        //TODO: if teamates return
+        if (!MCWar.getInstance().isGameInProgress()) return;
+        if (e.getDamager() instanceof Player && e.getEntity() instanceof Player) {
+            if (MCWar.getInstance().onSameTeam((Player) e.getDamager(), (Player) e.getEntity())) {
+                e.setCancelled(true);
+                e.setDamage(0.0);
+                return;
+            }
+        }
 
         if (e.getEntity() instanceof Player && e.getDamager() instanceof Projectile) {
             Player p = (Player) e.getEntity();
@@ -75,7 +82,7 @@ public class ClassEvents implements Listener {
             }
 
             //Mage steal health
-            else if(pr.getShooter() instanceof Player && MCWar.getInstance().getPlayerClass((Player) pr.getShooter()) instanceof Mage) {
+            else if (pr.getShooter() instanceof Player && MCWar.getInstance().getPlayerClass((Player) pr.getShooter()) instanceof Mage) {
                 pr.getShooter().setHealth((double) (pr.getShooter().getHealth() + (e.getDamage() / 2.0D)));
             }
         }
@@ -159,6 +166,8 @@ public class ClassEvents implements Listener {
     }
 
     public void onEntityDeath(EntityDeathEvent e) {
+        if (!MCWar.getInstance().isGameInProgress()) return;
+
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             Player killer = p.getKiller();
@@ -176,6 +185,8 @@ public class ClassEvents implements Listener {
 
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent e) {
+        if (!MCWar.getInstance().isGameInProgress()) return;
+
         if (e.getEntity().getShooter() instanceof Player) {
             Player p = (Player) e.getEntity().getShooter();
 
@@ -197,7 +208,8 @@ public class ClassEvents implements Listener {
 
     @EventHandler
     public void onEntityShootBow(EntityShootBowEvent e) {
-        if(e.isCancelled()) return;
+        if (e.isCancelled()) return;
+        if (!MCWar.getInstance().isGameInProgress()) return;
 
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
@@ -210,7 +222,8 @@ public class ClassEvents implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
-        if(e.isCancelled()) return;
+        if (e.isCancelled()) return;
+        if (!MCWar.getInstance().isGameInProgress()) return;
 
         Player p = e.getPlayer();
         CoolDownManager cdm = MCWar.getInstance().getCoolDownManager();
@@ -232,8 +245,8 @@ public class ClassEvents implements Listener {
             }
 
             //Special attack
-            else if(!e.getAction().equals(Action.PHYSICAL) && p.getItemInHand().getType().equals(Material.FIREBALL)) {
-                if(cdm.isCooledDown("magespec", p)) {
+            else if (!e.getAction().equals(Action.PHYSICAL) && p.getItemInHand().getType().equals(Material.FIREBALL)) {
+                if (cdm.isCooledDown("magespec", p)) {
                     cdm.setCoolDown("magespec", p, 800);
                     ((Mage) c).spec3(p);
                 } else {
@@ -245,16 +258,19 @@ public class ClassEvents implements Listener {
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent e) {
+        if (e.isCancelled()) return;
+        if (!MCWar.getInstance().isGameInProgress()) return;
+
         Player p = e.getPlayer();
         CoolDownManager cdm = MCWar.getInstance().getCoolDownManager();
         MCWarClass c = MCWar.getInstance().getPlayerClass(p);
 
-        if(e.getRightClicked() instanceof Player) {
+        if (e.getRightClicked() instanceof Player) {
             Player clicked = (Player) e.getRightClicked();
             //Healer
-            if(c instanceof Healer) {
+            if (c instanceof Healer) {
                 //Regular heal health
-                if(p.getItemInHand().getType().equals(Material.PAPER) && MCWar.getInstance().onSameTeam(p, clicked)) {
+                if (p.getItemInHand().getType().equals(Material.PAPER) && MCWar.getInstance().onSameTeam(p, clicked)) {
                     addHealedPlayer(p, clicked);
                     clicked.setHealth((double) (clicked.getHealth() + 1.0D));
                     p.playEffect(clicked.getLocation(), Effect.MOBSPAWNER_FLAMES, (Object) 0);
@@ -262,8 +278,8 @@ public class ClassEvents implements Listener {
                 }
 
                 //Super heal health
-                else if(p.getItemInHand().equals(Material.BONE) && MCWar.getInstance().onSameTeam(p, clicked) && c.getSpec() >= 1) {
-                    if(cdm.isCooledDown("superheal", p)) {
+                else if (p.getItemInHand().equals(Material.BONE) && MCWar.getInstance().onSameTeam(p, clicked) && c.getSpec() >= 1) {
+                    if (cdm.isCooledDown("superheal", p)) {
                         cdm.setCoolDown("superheal", p, 600);
                         addHealedPlayer(p, clicked);
                         clicked.setHealth((double) clicked.getMaxHealth());
@@ -275,7 +291,7 @@ public class ClassEvents implements Listener {
                 }
 
                 //Hunger health healh
-                else if(p.getItemInHand().equals(Material.CAKE_BLOCK) && MCWar.getInstance().onSameTeam(p, clicked) && c.getSpec() >= 3) {
+                else if (p.getItemInHand().equals(Material.CAKE_BLOCK) && MCWar.getInstance().onSameTeam(p, clicked) && c.getSpec() >= 3) {
                     clicked.setFoodLevel(clicked.getFoodLevel() + 1);
                     p.playEffect(clicked.getLocation(), Effect.MOBSPAWNER_FLAMES, (Object) 0);
                     p.playEffect(clicked.getEyeLocation(), Effect.MOBSPAWNER_FLAMES, (Object) 0);
@@ -286,16 +302,19 @@ public class ClassEvents implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
+        if (e.isCancelled()) return;
+        if (!MCWar.getInstance().isGameInProgress()) return;
+
         //If they actually moved along x, y or z
-        if(e.getFrom().getX() == e.getTo().getX() && e.getFrom().getX() == e.getTo().getX() && e.getFrom().getX() == e.getTo().getX()) {
+        if (e.getFrom().getX() == e.getTo().getX() && e.getFrom().getX() == e.getTo().getX() && e.getFrom().getX() == e.getTo().getX()) {
             Player p = e.getPlayer();
             List<Entity> ents = p.getNearbyEntities(5, 5, 5);
             //Poison aura effect
-            if(!p.hasPotionEffect(PotionEffectType.POISON)) {
-                for(Entity ent : ents) {
-                    if(!(ent instanceof Player)) continue;
+            if (!p.hasPotionEffect(PotionEffectType.POISON)) {
+                for (Entity ent : ents) {
+                    if (!(ent instanceof Player)) continue;
                     Player near = (Player) ent;
-                    if(MCWar.getInstance().getPlayerClass(near) instanceof Mage) {
+                    if (MCWar.getInstance().getPlayerClass(near) instanceof Mage) {
                         p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 0, 100));
                         break;
                     }
@@ -306,7 +325,7 @@ public class ClassEvents implements Listener {
 
     //Helpers
     private void addHealedPlayer(Player healer, Player healed) {
-        if(!healedPlayers.containsKey(healer)) {
+        if (!healedPlayers.containsKey(healer)) {
             ArrayList<Player> l = new ArrayList<>();
             l.add(healed);
             healedPlayers.put(healer, l);
