@@ -23,10 +23,38 @@ public class Healer implements MCWarClass {
         sword.getItemMeta().setDisplayName(ChatColor.GOLD + "Healer's Sword");
         this.inventory.add(sword);
 
+        ItemStack paper = new ItemStack(Material.PAPER);
+        paper.getItemMeta().setDisplayName(ChatColor.AQUA + "Bandage");
+        ArrayList<String> paperLore = new ArrayList<>();
+        paperLore.add(ChatColor.DARK_BLUE + "Cooldown: 0s");
+        paperLore.add(ChatColor.GRAY + "Right click on a player to heal them 1/2 heart");
+        paper.getItemMeta().setLore(paperLore);
+        this.inventory.add(paper);
+
         this.passiveEffects = new ArrayList<>();
     }
 
     public ArrayList<ItemStack> getInventory() {
+        if(spec >= 1) {
+            ItemStack bone = new ItemStack(Material.BONE);
+            bone.getItemMeta().setDisplayName(ChatColor.AQUA + "Super Heal");
+            ArrayList<String> boneLore = new ArrayList<>();
+            boneLore.add(ChatColor.DARK_BLUE + "Cooldown: 30s");
+            boneLore.add(ChatColor.GRAY + "Right click on a player to heal them fully");
+            bone.getItemMeta().setLore(boneLore);
+            this.inventory.add(bone);
+        }
+
+        if(spec >= 3) {
+            ItemStack cake = new ItemStack(Material.CAKE_BLOCK);
+            cake.getItemMeta().setDisplayName(ChatColor.AQUA + "The Lie");
+            ArrayList<String> cakeLore = new ArrayList<>();
+            cakeLore.add(ChatColor.DARK_BLUE + "Cooldown: 0s");
+            cakeLore.add(ChatColor.GRAY + "Right click a player to feed them 1 drumstick");
+            cake.getItemMeta().setLore(cakeLore);
+            this.inventory.add(cake);
+        }
+
         return inventory;
     }
 

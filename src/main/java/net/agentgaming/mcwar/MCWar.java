@@ -43,6 +43,10 @@ public class MCWar extends JavaPlugin {
         return true;
     }
 
+    public boolean onSameTeam(Player p1, Player p2) {
+        return true;
+    }
+
     public MCWarClass getPlayerClass(Player p) {
         return new Mage(0);
     }

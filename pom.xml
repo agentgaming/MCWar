@@ -48,13 +48,6 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>LATEST</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>com.mike724.motoapi</groupId>
             <artifactId>MotoAPI</artifactId>
             <version>(1.0,]</version>
