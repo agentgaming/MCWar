@@ -3,11 +3,15 @@ package net.agentgaming.mcwar;
 import com.mike724.motoapi.push.ServerState;
 import com.mike724.motoapi.push.ServerType;
 import com.mike724.motoserver.MotoServer;
+import net.agentgaming.mcwar.classes.MCWarClass;
+import net.agentgaming.mcwar.classes.Mage;
 import net.agentgaming.mcwar.events.ClassEvents;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MCWar extends JavaPlugin {
     private static MCWar instance;
+    private CoolDownManager cdm;
 
     @Override
     public void onEnable() {
@@ -20,6 +24,9 @@ public class MCWar extends JavaPlugin {
         //Register Events
         getServer().getPluginManager().registerEvents(new ClassEvents(), this);
 
+        //Set cooldown manager
+        CoolDownManager cdm = new CoolDownManager();
+
         this.getLogger().info("MCWar Enabled");
     }
 
@@ -28,6 +35,17 @@ public class MCWar extends JavaPlugin {
         this.getLogger().info("MCwar Disabled");
     }
 
+    public CoolDownManager getCoolDownManager() {
+        return cdm;
+    }
+
+    public boolean isGameInProgress() {
+        return true;
+    }
+
+    public MCWarClass getPlayerClass(Player p) {
+        return new Mage(0);
+    }
 
     @SuppressWarnings("unused")
     public static MCWar getInstance() {
