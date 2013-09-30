@@ -172,14 +172,7 @@ public class ClassEvents implements Listener {
             Player p = (Player) e.getEntity();
             Player killer = p.getKiller();
 
-            //On player killed by Agent arrow
-            if (MCWar.getInstance().getPlayerClass(p) instanceof Agent) {
-                Agent g = (Agent) MCWar.getInstance().getPlayerClass(p);
-
-                if (p.getLastDamageCause().getEntityType().equals(EntityType.ARROW)) {
-
-                }
-            }
+            MCWar.getInstance().setPlayerClass(p, null);
         }
     }
 

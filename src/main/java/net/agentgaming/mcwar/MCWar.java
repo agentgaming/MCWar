@@ -24,6 +24,9 @@ public class MCWar extends JavaPlugin {
     private boolean gameInProgress;
     private HashMap<Player, MCWarClass> playerClasses;
 
+    private int redScore;
+    private int blueScore;
+
     @Override
     public void onEnable() {
         //Set our instance
@@ -90,6 +93,22 @@ public class MCWar extends JavaPlugin {
 
     public TeamManager getTeams() {
         return teams;
+    }
+
+    public int getRedScore() {
+        return redScore;
+    }
+
+    public void setRedScore(int i) {
+        redScore = i;
+    }
+
+    public int getBlueScore() {
+        return blueScore;
+    }
+
+    public void setBlueScore(int i) {
+        blueScore = i;
     }
 
     public static MCWar getInstance() {
