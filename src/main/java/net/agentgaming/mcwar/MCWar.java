@@ -6,13 +6,14 @@ import com.mike724.motoapi.push.ServerState;
 import com.mike724.motoapi.push.ServerType;
 import com.mike724.motoserver.MotoServer;
 import net.agentgaming.mcwar.classes.MCWarClass;
-import net.agentgaming.mcwar.classes.Mage;
 import net.agentgaming.mcwar.events.ClassEvents;
+import net.agentgaming.mcwar.events.GameEvents;
+import net.agentgaming.mcwar.game.CoolDownManager;
 import net.agentgaming.mcwar.game.LobbyState;
+import net.agentgaming.mcwar.game.PlayerDataManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MCWar extends JavaPlugin {
@@ -21,6 +22,8 @@ public class MCWar extends JavaPlugin {
     private Game game;
 
     private TeamManager teams;
+    private PlayerDataManager pdm;
+
     private boolean gameInProgress;
     private HashMap<Player, MCWarClass> playerClasses;
 
@@ -37,9 +40,13 @@ public class MCWar extends JavaPlugin {
 
         //Register Events
         getServer().getPluginManager().registerEvents(new ClassEvents(), this);
+        getServer().getPluginManager().registerEvents(new GameEvents(), this);
 
         //Set up cooldown manager
         cdm = new CoolDownManager();
+
+        //Set up PlayerDataManager
+        pdm = new PlayerDataManager();
 
         //Setup game and teams
         teams = new TeamManager();
@@ -62,27 +69,22 @@ public class MCWar extends JavaPlugin {
         return false;
     }
 
-    public MCWarClass getPlayerClass(Player p) {
-        if(playerClasses.containsKey(p)) return null;
-        return playerClasses.get(p);
-    }
-
-    public void setPlayerClass(Player p, MCWarClass c) {
-        playerClasses.put(p, c);
-    }
-
-    public void clearPlayerClasses() {
-        playerClasses = new HashMap<Player, MCWarClass>();
-    }
-
+    // Game
     public Game getGame() {
         return game;
     }
 
+    // Cooldown Manager
     public CoolDownManager getCoolDownManager() {
         return cdm;
     }
 
+    // Player Data Manager
+    public PlayerDataManager getPlayerDataManager() {
+        return pdm;
+    }
+
+    // Game Progress
     public void setGameInProgress(boolean gameInProgress) {
         this.gameInProgress = gameInProgress;
     }
@@ -91,10 +93,12 @@ public class MCWar extends JavaPlugin {
         return gameInProgress;
     }
 
+    // Team Manager
     public TeamManager getTeams() {
         return teams;
     }
 
+    // Red Score
     public int getRedScore() {
         return redScore;
     }
@@ -103,6 +107,7 @@ public class MCWar extends JavaPlugin {
         redScore = i;
     }
 
+    // Blue Score
     public int getBlueScore() {
         return blueScore;
     }

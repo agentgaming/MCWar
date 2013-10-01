@@ -1,8 +1,9 @@
 package net.agentgaming.mcwar.events;
 
-import net.agentgaming.mcwar.CoolDownManager;
+import net.agentgaming.mcwar.game.CoolDownManager;
 import net.agentgaming.mcwar.MCWar;
 import net.agentgaming.mcwar.classes.*;
+import net.agentgaming.mcwar.game.PlayerData;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,14 +36,14 @@ public class ClassEvents implements Listener {
             Player p = (Player) e.getEntity();
 
             //Immune to poison
-            MCWarClass c = MCWar.getInstance().getPlayerClass(p);
+            MCWarClass c = getPlayerClass(p);
             if (c.isImmuneToPoison() && e.getCause().equals(EntityDamageEvent.DamageCause.POISON)) {
                 e.setCancelled(true);
             }
 
             //Tank
-            if (MCWar.getInstance().getPlayerClass(p) instanceof Tank) {
-                Tank t = (Tank) MCWar.getInstance().getPlayerClass(p);
+            if (getPlayerClass(p) instanceof Tank) {
+                Tank t = (Tank) getPlayerClass(p);
                 //Block 10% of damage
                 if (t.getSpec() >= 1 && randomBoolean(.10F)) {
                     e.setCancelled(true);
@@ -50,8 +51,8 @@ public class ClassEvents implements Listener {
             }
 
             //Scout
-            else if (MCWar.getInstance().getPlayerClass(p) instanceof Scout) {
-                Scout s = (Scout) MCWar.getInstance().getPlayerClass(p);
+            else if (getPlayerClass(p) instanceof Scout) {
+                Scout s = (Scout) getPlayerClass(p);
                 //Block fall damage
                 if (e.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
                     e.setCancelled(true);
@@ -77,12 +78,12 @@ public class ClassEvents implements Listener {
             Projectile pr = (Projectile) e.getDamager();
 
             //Agent deflect projectiles
-            if (MCWar.getInstance().getPlayerClass(p) instanceof Agent) {
+            if (getPlayerClass(p) instanceof Agent) {
                 e.setCancelled(true);
             }
 
             //Mage steal health
-            else if (pr.getShooter() instanceof Player && MCWar.getInstance().getPlayerClass((Player) pr.getShooter()) instanceof Mage) {
+            else if (pr.getShooter() instanceof Player && getPlayerClass((Player) pr.getShooter()) instanceof Mage) {
                 pr.getShooter().setHealth((double) (pr.getShooter().getHealth() + (e.getDamage() / 2.0D)));
             }
         }
@@ -91,8 +92,8 @@ public class ClassEvents implements Listener {
         if (e.getDamager() instanceof Player) {
             Player p = (Player) e.getDamager();
             //Tank
-            if (MCWar.getInstance().getPlayerClass(p) instanceof Tank) {
-                Tank t = (Tank) MCWar.getInstance().getPlayerClass(p);
+            if (getPlayerClass(p) instanceof Tank) {
+                Tank t = (Tank) getPlayerClass(p);
                 //Heal base damage
                 if (t.getSpec() >= 3) {
                     p.setHealth((double) (p.getHealth() + 1.0D));
@@ -104,8 +105,8 @@ public class ClassEvents implements Listener {
             }
 
             //Scout
-            else if (MCWar.getInstance().getPlayerClass(p) instanceof Scout) {
-                Scout s = (Scout) MCWar.getInstance().getPlayerClass(p);
+            else if (getPlayerClass(p) instanceof Scout) {
+                Scout s = (Scout) getPlayerClass(p);
                 //Set on fire
                 if (s.getSpec() >= 2 && randomBoolean(.20F)) {
                     e.getEntity().setFireTicks(140);
@@ -123,8 +124,8 @@ public class ClassEvents implements Listener {
                 Player p = (Player) a.getShooter();
 
                 //Ranger arrows
-                if (MCWar.getInstance().getPlayerClass(p) instanceof Ranger) {
-                    Ranger r = (Ranger) MCWar.getInstance().getPlayerClass(p);
+                if (getPlayerClass(p) instanceof Ranger) {
+                    Ranger r = (Ranger) getPlayerClass(p);
 
                     //Poison
                     if (r.getSpec() == 2 || r.getSpec() >= 3 && randomBoolean(.10F)) {
@@ -135,8 +136,8 @@ public class ClassEvents implements Listener {
                 }
 
                 //Agent arrows
-                else if (MCWar.getInstance().getPlayerClass(p) instanceof Agent) {
-                    Agent g = (Agent) MCWar.getInstance().getPlayerClass(p);
+                else if (getPlayerClass(p) instanceof Agent) {
+                    Agent g = (Agent) getPlayerClass(p);
 
                     //Deal half health
                     if (g.getSpec() >= 1) {
@@ -165,17 +166,6 @@ public class ClassEvents implements Listener {
         }
     }
 
-    public void onEntityDeath(EntityDeathEvent e) {
-        if (!MCWar.getInstance().isGameInProgress()) return;
-
-        if (e.getEntity() instanceof Player) {
-            Player p = (Player) e.getEntity();
-            Player killer = p.getKiller();
-
-            MCWar.getInstance().setPlayerClass(p, null);
-        }
-    }
-
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent e) {
         if (!MCWar.getInstance().isGameInProgress()) return;
@@ -184,8 +174,8 @@ public class ClassEvents implements Listener {
             Player p = (Player) e.getEntity().getShooter();
 
             //Ranger
-            if (MCWar.getInstance().getPlayerClass(p) instanceof Ranger) {
-                Ranger r = (Ranger) MCWar.getInstance().getPlayerClass(p);
+            if (getPlayerClass(p) instanceof Ranger) {
+                Ranger r = (Ranger) getPlayerClass(p);
 
                 if (e.getEntity() instanceof Arrow) {
                     //Exploding arrows
@@ -208,7 +198,7 @@ public class ClassEvents implements Listener {
             Player p = (Player) e.getEntity();
 
             //Instashoot
-            MCWarClass c = MCWar.getInstance().getPlayerClass(p);
+            MCWarClass c = getPlayerClass(p);
             if (c.hasInstaShoot()) e.setCancelled(true);
         }
     }
@@ -220,7 +210,7 @@ public class ClassEvents implements Listener {
 
         Player p = e.getPlayer();
         CoolDownManager cdm = MCWar.getInstance().getCoolDownManager();
-        MCWarClass c = MCWar.getInstance().getPlayerClass(p);
+        MCWarClass c = getPlayerClass(p);
 
         //Instashoot
         if (c.hasInstaShoot() && cdm.isCooledDown("instashoot", p)) {
@@ -256,7 +246,7 @@ public class ClassEvents implements Listener {
 
         Player p = e.getPlayer();
         CoolDownManager cdm = MCWar.getInstance().getCoolDownManager();
-        MCWarClass c = MCWar.getInstance().getPlayerClass(p);
+        MCWarClass c = getPlayerClass(p);
 
         if (e.getRightClicked() instanceof Player) {
             Player clicked = (Player) e.getRightClicked();
@@ -307,7 +297,7 @@ public class ClassEvents implements Listener {
                 for (Entity ent : ents) {
                     if (!(ent instanceof Player)) continue;
                     Player near = (Player) ent;
-                    if (MCWar.getInstance().getPlayerClass(near) instanceof Mage) {
+                    if (getPlayerClass(near) instanceof Mage) {
                         p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 0, 100));
                         break;
                     }
@@ -329,5 +319,9 @@ public class ClassEvents implements Listener {
 
     private boolean randomBoolean(Float probability) {
         return new Random().nextFloat() < probability;
+    }
+
+    private MCWarClass getPlayerClass(Player p) {
+        return MCWar.getInstance().getPlayerDataManager().getPlayerData(p).getMCWarClass();
     }
 }

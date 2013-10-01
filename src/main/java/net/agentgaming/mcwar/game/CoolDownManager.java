@@ -1,4 +1,4 @@
-package net.agentgaming.mcwar;
+package net.agentgaming.mcwar.game;
 
 import org.bukkit.entity.Player;
 

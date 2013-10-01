@@ -55,7 +55,11 @@ public class GameState extends com.mike724.motoapi.games.GameState {
             scoreBoard.setDisplayName("MCWAR - Time Left: " + ((gameTicks - ticks) / 20) + "s");
             p.setScoreboard(scoreBoard.getScoreboard());
 
-            if(mcwar.getPlayerClass(p) == null && p.getOpenInventory() != null && p.getOpenInventory().getTopInventory() != selectionInterface.getInventory()) {
+            if(!mcwar.getPlayerDataManager().hasPlayerData(p)) {
+                mcwar.getPlayerDataManager().addPlayerData(new PlayerData(p));
+            }
+
+            if(!mcwar.getPlayerDataManager().getPlayerData(p).hasMCWarClass() && p.getOpenInventory() != null && p.getOpenInventory().getTopInventory() != selectionInterface.getInventory()) {
                 p.openInventory(selectionInterface.getInventory());
             }
         }
@@ -79,7 +83,7 @@ public class GameState extends com.mike724.motoapi.games.GameState {
     public void setupState() {
         mcwar.setGameInProgress(true);
 
-        mcwar.clearPlayerClasses();
+        mcwar.getPlayerDataManager().clearPlayerData();
         mcwar.getTeams().removeAllPlayers();
 
         mcwar.getTeams().addTeam(new TeamMeta("Blue"));
