@@ -4,7 +4,10 @@ import com.mike724.motoapi.interfaces.InterfaceClick;
 import com.mike724.motoapi.interfaces.InterfaceOption;
 import net.agentgaming.mcwar.MCWar;
 import net.agentgaming.mcwar.classes.*;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 
 public class ClassSelectionInterface {
     @InterfaceOption(slot = 0, name = "Tank", description = "Low speed and agility with a lot of damage and armor", itemId = 276)
@@ -53,6 +56,27 @@ public class ClassSelectionInterface {
         }
 
         MCWar.getInstance().getPlayerDataManager().getPlayerData(p).setMCWarClass(c);
+
+        p.getInventory().removeItem(p.getInventory().getContents());
+
+        if(MCWar.getInstance().getTeams().getTeam("Red").contains(p)) {
+            p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 14));
+        } else if(MCWar.getInstance().getTeams().getTeam("Blue").contains(p)) {
+            p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 11));
+        }
+
+        p.getInventory().setChestplate(c.getChestArmor());
+        p.getInventory().setLeggings(c.getLegArmor());
+        p.getInventory().setBoots(c.getFootArmor());
+
+        ItemStack[] inv = new ItemStack[c.getInventory().size()];
+        c.getInventory().toArray(inv);
+        p.getInventory().addItem(inv);
+
+        for(PotionEffect pe : c.getPassiveEffects()) {
+            p.addPotionEffect(pe, true);
+        }
+
         p.closeInventory();
     }
 }
