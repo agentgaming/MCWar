@@ -36,7 +36,7 @@ public class MCWar extends JavaPlugin {
         instance = this;
 
         //Register the server with MotoPush (needs to be changed to ServerType.MCWar when exists)
-        MotoServer.getInstance().getMotoPush().setIdentity(ServerType.UNKNOWN, ServerState.OPEN);
+        MotoServer.getInstance().getMotoPush().setIdentity(ServerType.MCWAR, ServerState.OPEN);
 
         //Register Events
         getServer().getPluginManager().registerEvents(new ClassEvents(), this);
